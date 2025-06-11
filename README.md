@@ -33,6 +33,5 @@ Adjust accordingly if need be.
 
 Optional*  
 This can run everytime you open your terminal by placing the path (or alias) to program at the end of the .bashrc file. 
-Careful not to mess anything else up in .bashrc.
 
 enjoy
