@@ -19,15 +19,13 @@ Packages
 CPU  
 GPU  
 
-
-
-
+ 
 If any problems with display:  
 
 tr (translate) was used for deleting characters in output,  
 mostly parenthesis (), brackets [], and single quotes ''.  
 
-The cut command, was also used to delete certain characters from output.  
+The cut command was also used to delete certain characters from output.  
 
 In printf, %5s is used for spacing between printf and output.   
 Adjust accordingly if need be.  
