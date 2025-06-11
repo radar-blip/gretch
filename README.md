@@ -31,6 +31,7 @@ The cut command was also used to delete certain characters from output.
 In printf, %-5s is used for spacing between printf and output.   
 Adjust accordingly if need be.  
 
+<br />  
 
 Optional*  
 This can run everytime you open your terminal by placing the path (or alias) to program at the end of the .bashrc file.  
