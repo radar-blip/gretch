@@ -17,8 +17,9 @@ WM Theme
 Resolution  
 Packages  
 CPU  
-GPU  
+GPU    
 
+<br />
  
 If any problems with display:  
 
@@ -32,6 +33,8 @@ Adjust accordingly if need be.
 
 
 Optional*  
-This can run everytime you open your terminal by placing the path (or alias) to program at the end of the .bashrc file. 
+This can run everytime you open your terminal by placing the path (or alias) to program at the end of the .bashrc file.  
+
+<br />  
 
 enjoy
