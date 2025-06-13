@@ -8,6 +8,7 @@ clear
 printf "${bold}System Information\n"
 printf '\b------------------\n\n'
 
+
 #for extracting OS/version
 . /etc/os-release
 
@@ -30,7 +31,7 @@ printf "Uptime:%-5s" ; uptime -p | cut -b 4-
 (printf "Shell:%-6s" ; ps -o fname --no-headers $$
 printf $BASH_VERSION | cut -b 1-6) | tr '\n' ' '
 
-#get wm (window management)
+#get wm (window manager)
 printf "\nWM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 
 #get wm theme
@@ -43,13 +44,9 @@ printf "Theme:%-6s" ; gsettings get org.cinnamon.desktop.wm.preferences theme | 
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 
-#these two commands are combined
-#dpkg packages (installed)
-(printf "Packages:%-3s"  ; dpkg --get-selections | wc --lines && printf "(dpkg), "
-
-#flatpak packages
-flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' '
-
+#dpkg and flatpak packages
+(printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
+                          flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' '
 
 #get CPU
 printf "\nCPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1'
@@ -57,7 +54,12 @@ printf "\nCPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}
 #get GPU
 printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f3 | tr -d "[]"
 
+
+#memory (in mebibytes)
+(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' && printf "MiB(total), " 
+                        free -m | grep -oP '\d+' | sed '2!d' && printf "MiB(used) ") | tr '\n' ' '
+
 #get local IP
-printf "Local IP:%-3s" ; hostname -I | cut -f1 -d' '
+printf "\nLocal IP:%-3s" ; hostname -I | cut -f1 -d' '
 
 printf "${normal}\n"
