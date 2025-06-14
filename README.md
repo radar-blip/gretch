@@ -1,6 +1,6 @@
 ## gretch
 
-Program made with bash for linux mint.  
+Shell script made with bash for linux mint.  
 Run from terminal to display system information in Linux Mint.  
 
 Information displayed includes:
