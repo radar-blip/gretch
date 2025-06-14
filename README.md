@@ -1,8 +1,7 @@
-# gretch
+## gretch
 
-Small program made with bash for linux mint.  
-Collects and displays information of Linux Mint systems in terminal.
-
+Program made with bash for linux mint.  
+Run from terminal to display system information in Linux Mint.  
 
 Information displayed includes:
 
