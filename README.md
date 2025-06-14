@@ -37,4 +37,4 @@ This can run everytime you open your terminal by placing the path (or alias) to 
 
 <br />  
 
-enjoy
+Note: Anything not wanted and/or needed to be displayed can be commented out in code.
