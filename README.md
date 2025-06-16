@@ -32,9 +32,9 @@ Adjust accordingly if need be.
 
 <br />  
 
-Optional*  
+**Optional***  
 This can run everytime you open your terminal by placing the path (or alias) to program at the end of the .bashrc file.  
 
 <br />  
 
-Note: Anything not wanted or needed to be displayed can be commented out in code.
+**Note:** Anything not wanted or needed to be displayed can be commented out in code.
