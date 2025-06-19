@@ -49,11 +49,22 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 (printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
                           flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
 
-#get CPU
-printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1'
+#CPU (short output)
+#uses OR operator (||) will output long version if short fails
+(printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
+                     lscpu | grep 'max' | cut -f 2 -d ":" | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' && printf " Mhz") | tr '\n' ' ' ; printf "\n" ||
 
-#get GPU
-printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f3 | tr -d "[]"
+#CPU (long output)
+(printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')
+
+#===separator===
+
+#GPU (short output)
+#uses OR operator (||) will output long version if short fails
+(printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f3 | tr -d "[]") ||
+
+#GPU (long output)
+(printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f3 | tr -d "[]")
 
 
 #memory (in mebibytes)
