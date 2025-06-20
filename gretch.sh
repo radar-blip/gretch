@@ -16,7 +16,7 @@ printf '\b------------------\n\n'
 #get OS name (extracted from etc/os-release)
 printf "OS:%-9s" ; printf "$NAME\n"
 
-#get OS version\codename
+#get OS version/codename
 printf "Version:%-4s" ; printf "$VERSION\n"
 
 #get desktop environment
@@ -28,30 +28,33 @@ printf "Kernel:%-5s" ; uname -r
 #get uptime
 printf "Uptime:%-5s" ; uptime -p | cut -b 4-
 
-#get shell and version
+#get shell/version
 (printf "Shell:%-6s" ; ps -o fname --no-headers $$
 printf $BASH_VERSION | cut -b 1-6) | tr '\n' ' ' ; printf "\n"
+
 
 #WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 
+#wm theme (desktop)
+printf "WM Theme:%-3s" ; gsettings get org.cinnamon.theme name | tr -d "''"
+
+#gtk-theme
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
+
+printf "\n"
 #gtk-icons 
 printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
 
-printf "\n"
-#gtk-apps
-printf "Apps:%-5s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
 
 printf "\n"
-#wm theme (desktop)
-printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
-
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 #dpkg and flatpak packages
 (printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
                           flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
+
 
 #CPU (short output)
 #uses OR operator (||) will output long version if short fails
@@ -61,7 +64,6 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 #CPU (long output)
 (printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')
 
-#===sep===
 
 #GPU (short output)
 #uses OR operator (||) will output long version if short fails
