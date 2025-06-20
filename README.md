@@ -1,7 +1,7 @@
 ## gretch
 
 Shell script made for Linux Mint.  
-This can be run from your terminal to display your systems information.  
+Can be run from your terminal to display your systems information.  
 
 Displayed information includes:
 
