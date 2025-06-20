@@ -1,6 +1,6 @@
 #/bin/bash
-#gretch 
-#collect/display system info
+# gretch 
+# collect/display system info
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -32,18 +32,22 @@ printf "Uptime:%-5s" ; uptime -p | cut -b 4-
 (printf "Shell:%-6s" ; ps -o fname --no-headers $$
 printf $BASH_VERSION | cut -b 1-6) | tr '\n' ' ' ; printf "\n"
 
-#get wm (window manager)
+#WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 
-#get wm theme
-printf "WM Theme:%-3s" ; gsettings get org.cinnamon.theme name | tr -d "''"
+#gtk-icons 
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
 
-#get desktop theme
-printf "Theme:%-6s" ; gsettings get org.cinnamon.desktop.wm.preferences theme | tr -d "''"
+printf "\n"
+#gtk-apps
+printf "Apps:%-5s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
 
-#get resolution
+printf "\n"
+#wm theme (desktop)
+printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
+
+#resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
-
 
 #dpkg and flatpak packages
 (printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
@@ -57,7 +61,7 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 #CPU (long output)
 (printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')
 
-#===separator===
+#===sep===
 
 #GPU (short output)
 #uses OR operator (||) will output long version if short fails
