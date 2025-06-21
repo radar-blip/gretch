@@ -1,6 +1,6 @@
 #/bin/bash
 # gretch 
-# collect/display system info
+# system info gathering script
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -13,22 +13,22 @@ printf '\b------------------\n\n'
 #for extracting OS/version
 . /etc/os-release
 
-#get OS name (extracted from etc/os-release)
+#OS name (extracted from etc/os-release)
 printf "OS:%-9s" ; printf "$NAME\n"
 
-#get OS version/codename
+#OS version/codename
 printf "Version:%-4s" ; printf "$VERSION\n"
 
-#get desktop environment
+#desktop environment
 printf "DE:%-9s" ; printf "$XDG_CURRENT_DESKTOP\n" | tr -d 'X-'
 
-#get kernel
+#kernel
 printf "Kernel:%-5s" ; uname -r
 
-#get uptime
+#uptime
 printf "Uptime:%-5s" ; uptime -p | cut -b 4-
 
-#get shell/version
+#shell/version
 (printf "Shell:%-6s" ; ps -o fname --no-headers $$
 printf $BASH_VERSION | cut -b 1-6) | tr '\n' ' ' ; printf "\n"
 
@@ -39,12 +39,12 @@ printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 #wm theme (desktop)
 printf "WM Theme:%-3s" ; gsettings get org.cinnamon.theme name | tr -d "''"
 
-#gtk-theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
+#theme
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]"
 
 printf "\n"
-#gtk-icons 
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' '
+#icons 
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]"
 
 
 printf "\n"
