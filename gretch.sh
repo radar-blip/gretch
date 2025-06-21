@@ -51,7 +51,7 @@ printf "\n"
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
-#dpkg and flatpak packages
+#dpkg/flatpak packages
 (printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
                           flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
 
@@ -77,7 +77,5 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' && printf "MiB(total), " 
                         free -m | grep -oP '\d+' | sed '2!d' && printf "MiB(used) ") | tr '\n' ' ' ; printf "\n"
 
-#get local IP
-printf "Local IP:%-3s" ; hostname -I | cut -f1 -d' '
 
 printf "${normal}\n"
