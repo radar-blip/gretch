@@ -6,9 +6,18 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 clear
-printf "${bold}System Information\n"
-printf '\b------------------\n\n'
+printf "${bold}\n"
 
+who=$(id -u -n)
+where=$(hostname)
+
+printf $who ; printf "@" 
+printf $where"\n" 
+
+printf $who | tr $who '-' 
+printf $where | tr $where '-' | awk '{print $0"-"}'
+
+printf "\n"
 
 #for extracting OS/version
 . /etc/os-release
