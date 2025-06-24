@@ -6,17 +6,14 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 clear
-printf "${bold}\n"
+printf "${bold}"
 
 who=$(id -u -n)
 where=$(hostname)
-
-printf $who ; printf "@" 
-printf $where"\n" 
-
-printf $who | tr $who '-' 
-printf $where | tr $where '-' | awk '{print $0"-"}'
-
+printf '%s' "$who" "@" 
+printf "$where\n" 
+printf "$who" | tr "$who" '-' 
+printf "$where" | tr "$where" '-' | awk '{print $0"-"}'
 printf "\n"
 
 #for extracting OS/version
@@ -49,26 +46,23 @@ printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 printf "WM Theme:%-3s" ; gsettings get org.cinnamon.theme name | tr -d "''"
 
 #theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]"
-
-printf "\n"
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]\n" 
 #icons 
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]"
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]\n"
 
 
-printf "\n"
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
-#dpkg/flatpak packages
-(printf "Packages:%-3s" ; dpkg --get-selections | wc --lines && printf "(dpkg), "
-                          flatpak list | wc -l && printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
+#packages
+(printf "Packages:%-3s" ; dpkg --get-selections | wc --lines ; printf "(dpkg), "
+                          flatpak list | wc -l ; printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
 
 
 #CPU (short output)
 #uses OR operator (||) will output long version if short fails
 (printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                     lscpu | grep 'max' | cut -f 2 -d ":" | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' && printf " Mhz") | tr '\n' ' ' ; printf "\n" ||
+                     lscpu | grep 'max' | cut -f 2 -d ":" | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz") | tr '\n' ' ' ; printf "\n" ||
 
 #CPU (long output)
 (printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')
@@ -83,8 +77,6 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 
 #memory (in mebibytes)
-(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' && printf "MiB(total), " 
-                        free -m | grep -oP '\d+' | sed '2!d' && printf "MiB(used) ") | tr '\n' ' ' ; printf "\n"
-
-
+(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' ; printf "MiB(total), " 
+                        free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' ' ; printf "\n"
 printf "${normal}\n"
