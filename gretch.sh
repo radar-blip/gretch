@@ -41,13 +41,14 @@ printf "$BASH_VERSION" | cut -b 1-6) | tr '\n' ' ' ; printf "\n"
 #WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d: -f2
 
-#wm theme (desktop)
-printf "WM Theme:%-3s" ; gsettings get org.cinnamon.theme name | tr -d "''"
-
 #theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]\n" 
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -f 2 -d ":" | tr '\n"' ' ' ; printf "\b[GTK2/3]\n" 
+
 #icons 
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"'  ' ' ; printf "\b[GTK2/3]\n"
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -f 2 -d ":" | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
+
+#desktop theme
+printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
 
 
 #resolution
@@ -77,7 +78,7 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 #memory (in mebibytes)
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' ; printf "MiB(total), " 
-                        free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' ' ; 
+                        free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' '
 
 printf "\n\n${normal}"
 
