@@ -15,14 +15,9 @@ printf "$who" | tr "$who" '\n-'
 printf "$where" | tr "$where" '-' | awk '{print $0"--"}'
 printf "\n"
 
-#for extracting OS/version
-. /etc/os-release
 
-#OS name (extracted from etc/os-release)
-printf "OS:%-9s$NAME\n"
-
-#OS version/codename
-printf "Version:%-4s$VERSION\n"
+#OS name/version
+printf "OS:%-9s" ; cat /etc/lsb-release | grep 'DISTRIB_DESCRIPTION' | cut -f 2 -d '"'
 
 #desktop environment
 printf "DE:%-9s$XDG_CURRENT_DESKTOP\n" | tr -d 'X-'
