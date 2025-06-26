@@ -9,8 +9,7 @@ OS/Version
 DE  
 Kernel  
 Uptime  
-Shell  
-WM  
+Shell    
 Theme  
 Icons  
 Desktop theme  
