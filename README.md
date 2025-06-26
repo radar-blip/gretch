@@ -5,8 +5,7 @@ Can be run from your terminal to display your systems information.
 
 Displayed information includes:
 
-OS  
-Version  
+OS/Version  
 DE  
 Kernel  
 Uptime  
