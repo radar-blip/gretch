@@ -11,7 +11,9 @@ Kernel
 Uptime  
 Shell  
 WM  
-WM Theme  
+Theme  
+Icons  
+Desktop theme  
 Resolution  
 Packages  
 CPU  
