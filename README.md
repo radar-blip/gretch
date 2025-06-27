@@ -1,4 +1,4 @@
-## gretch
+## Gretch - System Information Gathering Script
 
 Shell script written in bash for Linux Mint.  
 Made to run and display your system information in terminal.    
