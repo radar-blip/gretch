@@ -60,20 +60,11 @@ else
 fi
 
 
-#CPU (short output)
-#uses OR operator (||) will output long version if short fails
-(printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                     lscpu | grep 'max' | cut -f 2 -d ":" | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz") | tr '\n' ' ' ; printf "\n" ||
-
-#CPU (long output)
+#CPU 
 (printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')
 
 
-#GPU (short output)
-#uses OR operator (||) will output long version if short fails
-(printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f3 | tr -d "[]") ||
-
-#GPU (long output)
+#GPU 
 (printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f3 | tr -d "[]")
 
 
