@@ -10,9 +10,9 @@ printf "${bold}"
 
 who=$(id -u -n)
 where=$(hostname)
-printf "%s" "$who" "@" "$where" 
-printf "$who" | tr "$who" '\n-' 
-printf "$where" | tr "$where" '-' | awk '{print $0"--"}'
+printf '%s' "$who" "@" "$where" 
+printf '%s' "$who" | tr "$who" '\n-' 
+printf '%s' "$where" | tr "$where" '-' | awk '{print $0"--"}'
 printf "\n"
 
 
@@ -50,8 +50,14 @@ printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 #packages
-(printf "Packages:%-3s" ; dpkg --get-selections | wc -l ; printf "(dpkg), "
-                          flatpak list | wc -l ; printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
+if [ "flatpak list | wc -l < 1" ] 
+then
+    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg)" ; printf "\n"
+    
+else
+    (printf "Packages:%-3s" ; dpkg --get-selections | wc -l ; printf "(dpkg), "
+                              flatpak list | wc -l ; printf "(flatpak)") | tr '\n' ' ' ; printf "\n"
+fi
 
 
 #CPU (short output)
