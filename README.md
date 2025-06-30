@@ -19,6 +19,27 @@ CPU
 GPU    
 
 <br />
+
+**Instructions:**
+
+Clone the repository (it will go to your home directory).  
+Open your terminal and cd (change directory) into the newly created 'gretch' folder. (cd gretch)  
+Once there, you can run script using ./gretch.sh  
+Note: you may need to change permission by typing: chmod +x gretch.sh  
+
+<br />
+
+**Or, Download the ZIP**    
+This will go to your Downloads folder (as gretch-main).  
+Extract files if necessary.  
+Open terminal and cd to Downloads (cd Downloads), and then to gretch-main (cd gretch-main).  
+From there, type: chmod +x gretch.sh   
+and run script using  
+./gretch.sh  
+
+Of course, you can save the files to a location of your choice (e.g. bin/bash)
+
+<br />
  
 If any problems with display:  
 
