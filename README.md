@@ -3,20 +3,19 @@
 **Shell script written in bash for Linux Mint.**  
 **Made to run and display your system information in terminal.**    
 
-Displayed information includes:
+Information displayed  includes:
 
-OS/Version  
-DE  
-Kernel  
-Uptime  
-Shell    
-Theme  
-Icons  
-Desktop theme  
-Resolution  
-Packages  
-CPU  
-GPU    
+- OS/Version  
+- DE  
+- Kernel  
+- Uptime  
+- Shell    
+- Theme  
+- Icons  
+- Resolution  
+- Packages  
+- CPU  
+- GPU    
 
 <br />
 
