@@ -3,7 +3,8 @@
 # system info gathering script
 
 bold=$(tput bold)
-normal=$(tput sgr0)
+norm=$(tput sgr0)
+yell=$(tput setaf 3)
 
 clear
 printf "${bold}"
@@ -17,7 +18,7 @@ printf "\n"
 
 
 #OS name/version
-printf "OS:%-9s" ; cat /etc/lsb-release | grep 'DISTRIB_DESCRIPTION' | cut -f2 -d '"'
+printf "OS:%-9s" ; cat /etc/lsb-release | grep 'DISTRIB_DESCRIPTION' | cut -d '"' -f 2
 
 #desktop environment
 printf "DE:%-9s$XDG_CURRENT_DESKTOP\n" | tr -d 'X-'
@@ -34,13 +35,13 @@ printf "$BASH_VERSION" | cut -c 1-6 | tr '\n' ' ' ; printf "\n"
 
 
 #WM (window manager)
-printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f2
+printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f 2
 
 #theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n" 
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n" 
 
 #icons 
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
 
 #desktop theme
 printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
@@ -59,18 +60,27 @@ fi
 
 
 #CPU 
-printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f2 | awk '{$1=$1}1' | tr '\n' ' '
-                    #max speed - (if double output, comment out these lines)
-                    lscpu | grep 'max' | cut -d ":" -f2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n"
+if [ "AMD A4-6300" ]; then
+    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #short
+else
+    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #long output
+fi
 
-#GPU 
-printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f3 | tr -d "[]"
+
+#GPU
+if [ "AMD 8370D" ]; then
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | sed 's/Richland //' #short
+else
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
+fi
 
 
 #memory (in mebibytes)
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' ; printf "MiB(total), " 
                         free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' '
 
-printf "${normal}\n\n"
+printf "${norm}\n\n"
 
 
