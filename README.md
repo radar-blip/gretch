@@ -5,17 +5,17 @@
 
 Information displayed  includes:
 
-- OS/Version  
-- DE  
-- Kernel  
-- Uptime  
-- Shell    
-- Theme  
-- Icons  
-- Resolution  
-- Packages  
-- CPU  
-- GPU    
+OS/Version  
+DE  
+Kernel  
+Uptime  
+Shell    
+Theme  
+Icons  
+Resolution  
+Packages  
+CPU  
+GPU    
 
 <br />
 
