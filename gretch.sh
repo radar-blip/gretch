@@ -21,7 +21,7 @@ printf "\n"
 printf "OS:%-9s" ; cat /etc/lsb-release | grep 'DISTRIB_DESCRIPTION' | cut -d '"' -f 2
 
 #desktop environment
-printf "DE:%-9s$XDG_CURRENT_DESKTOP\n" | tr -d 'X-'
+printf "DE:%-9s$DESKTOP_SESSION\n"
 
 #kernel
 printf "Kernel:%-5s" ; uname -r
@@ -29,10 +29,8 @@ printf "Kernel:%-5s" ; uname -r
 #uptime
 printf "Uptime:%-5s" ; uptime -p | cut -c 4-
 
-#shell/version
-printf "Shell:%-6s" ; ps -o fname --no-headers $$ | tr '\n' ' '
-printf "$BASH_VERSION" | cut -c 1-6 | tr '\n' ' ' ; printf "\n"
-
+#shell
+printf "Shell:%-6s" ; ps -p $$ -o 'comm='
 
 #WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f 2
@@ -71,7 +69,7 @@ fi
 
 #GPU
 if [ "AMD 8370D" ]; then
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | sed 's/Richland //' #short
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
 else
     printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
 fi
