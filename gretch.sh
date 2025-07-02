@@ -30,7 +30,14 @@ printf "Kernel:%-5s" ; uname -r
 printf "Uptime:%-5s" ; uptime -p | cut -c 4-
 
 #shell
-printf "Shell:%-6s" ; ps -p $$ -o 'comm='
+var="bash"
+if [ "$var" == "bash" ]; then
+    printf "Shell:%-6s" ; ps -p $$ -o 'comm=' | tr '\n' ' '
+    printf "$BASH_VERSION" | cut -c 1-6 | tr '\n' ' ' ; printf "\n"
+else
+    printf "Shell:%-6s" ; ps -p $$ -o 'comm=' | tr '\n' ' ' ; printf "\n"
+fi
+
 
 #WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f 2
