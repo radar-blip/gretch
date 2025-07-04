@@ -17,17 +17,25 @@ printf '%s' "$where" | tr "$where" '-' | awk '{print $0"--"}'
 printf "\n"
 
 
-#OS name/version
-printf "OS:%-9s" ; cat /etc/lsb-release | grep 'DISTRIB_DESCRIPTION' | cut -d '"' -f 2
+#OS name
+printf "OS:%-9s" ; cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2
+
+
+#OS version
+printf "Version:%-4s" ; cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2
+
 
 #desktop environment
 printf "DE:%-9s$DESKTOP_SESSION\n"
 
+
 #kernel
 printf "Kernel:%-5s" ; uname -r
 
+
 #uptime
 printf "Uptime:%-5s" ; uptime -p | cut -c 4-
+
 
 #shell
 var="bash"
@@ -42,11 +50,14 @@ fi
 #WM (window manager)
 printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f 2
 
+
 #theme
 printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n" 
 
+
 #icons 
 printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
+
 
 #desktop theme
 printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
@@ -54,6 +65,7 @@ printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
 
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
+
 
 #packages
 if [ "flatpak list | wc -l < 1" ]; then
@@ -85,6 +97,7 @@ fi
 #memory (in mebibytes)
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' ; printf "MiB(total), " 
                         free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' '
+
 
 printf "${norm}\n\n"
 
