@@ -26,7 +26,11 @@ printf "Version:%-4s" ; cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -
 
 
 #desktop environment
-printf "DE:%-9s$DESKTOP_SESSION\n"
+if [ $DESKTOP_SESSION == 'cinnamon' ]; then
+    printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'c' 'C'
+else
+    printf "DE:%-9s$DESKTOP_SESSION\n"
+fi
 
 
 #kernel
@@ -77,7 +81,7 @@ fi
 
 
 #CPU 
-if [ "AMD A4-6300" ]; then
+if [ "lscpu | grep 'Model name' == AMD A4-6300" ]; then
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
                         lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #short
 else
@@ -87,7 +91,7 @@ fi
 
 
 #GPU
-if [ "AMD 8370D" ]; then
+if [ "lspci | grep 'VGA' == AMD 8370D" ]; then
     printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
 else
     printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
