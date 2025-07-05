@@ -3,19 +3,8 @@
 **Shell script written in bash for Linux Mint.**  
 **Display system information in your terminal.**    
 
-Information displayed  includes:
+![screenshot](https://github.com/user-attachments/assets/0f01afe0-c8d5-4d06-9a39-d1aa5d303e31)
 
-OS/Version  
-DE  
-Kernel  
-Uptime  
-Shell    
-Theme  
-Icons  
-Resolution  
-Packages  
-CPU  
-GPU    
 
 <br />
 
