@@ -39,17 +39,6 @@ Of course, you can save the files to a location of your choice (e.g. bin/bash)
 
 <br />
  
-If any problems with display:  
-
-tr (translate) was used for deleting characters in output,  
-mostly parenthesis ( ), brackets [ ], and single quotes ' '.  
-
-The cut command was also used to delete unnecessary output.  
-
-In printf, (e.g. %-5s) is used for spacing between printf and output.   
-Adjust accordingly if need be.  
-
-<br />  
 
 **Optional***  
 This can be made to run everytime you open your terminal  
