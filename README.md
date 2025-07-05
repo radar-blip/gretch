@@ -1,7 +1,7 @@
 ## Gretch - System Information Gathering Script
 
 **Shell script written in bash for Linux Mint.**  
-**Run in terminal to collect and display system information.**    
+**Display system information in your terminal.**    
 
 Information displayed  includes:
 
