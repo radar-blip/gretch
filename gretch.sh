@@ -83,24 +83,24 @@ fi
 #CPU 
 if [ "lscpu | grep 'Model name' == AMD A4-6300" ]; then
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #short
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #shortened
 else
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #long output
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #normal output
 fi
 
 
 #GPU
 if [ "lspci | grep 'VGA' == AMD 8370D" ]; then
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #shortened
 else
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #normal output
 fi
 
 
 #memory (in mebibytes)
-(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '1!d' ; printf "MiB(total), " 
-                        free -m | grep -oP '\d+' | sed '2!d' ; printf "MiB(used) ") | tr '\n' ' '
+(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '2!d' ; printf "\bMiB / "
+                        free -m | grep -oP '\d+' | sed '1!d' ; printf "\bMiB ") | tr '\n' ' '
 
 
 printf "${norm}\n\n"
