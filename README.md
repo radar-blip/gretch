@@ -1,24 +1,24 @@
 ## Gretch - System Information Gathering Script
 
 **Shell script written in bash for Linux Mint.**  
-**Display system information in your terminal.**    
+**Displays system information in your terminal.**    
 
 ![screenshot](screenshot.png)
 <br />
 
 **Instructions:**
 
-1. Clone the repository (it will go to your home directory).
-2. Open your terminal and cd (change directory) into the newly created 'gretch' folder. (cd gretch)
+1. Clone the repository.
+2. Open your terminal and change directory into the newly created 'gretch' folder. `cd gretch`
 3. Once there, you can run script using: `./gretch.sh`  
-4. Note: you may need to change permission by typing: `chmod +x gretch.sh`    
+Note: you may need to change permission by typing: `chmod +x gretch.sh`    
 
 <br />
 
 **Or, Download the ZIP**    
 1. This will go to your Downloads folder (as gretch-main).  
 2. Extract files if necessary.  
-3. Open terminal and cd to Downloads (cd Downloads), then to gretch-main (cd gretch-main).  
+3. Open terminal and navigate to Downloads `cd Downloads`, then to gretch-main `cd gretch-main`.  
 4. From there, type: `chmod +x gretch.sh`     
 5. Run script using `./gretch.sh`  
 
