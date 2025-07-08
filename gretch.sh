@@ -73,10 +73,10 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 #packages
 if [ "flatpak list | wc -l < 1" ]; then
-    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg)" ; printf "\n"
+    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg)\n" 
 else
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg), "
-                             flatpak list | wc -l | tr '\n' ' ' ; printf "(flatpak)" | tr '\n' ' ' ; printf "\n"
+                             flatpak list | wc -l | tr '\n' ' ' ; printf "(flatpak)\n" 
 fi
 
 
