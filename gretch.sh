@@ -45,9 +45,9 @@ printf "Uptime:%-5s" ; uptime -p | cut -c 4-
 var="bash"
 if [ "$var" == "bash" ]; then
     printf "Shell:%-6s" ; ps -p $$ -o 'comm=' | tr '\n' ' '
-    printf "$BASH_VERSION" | cut -c 1-6 | tr '\n' ' ' ; printf "\n"
+    printf "$BASH_VERSION" | cut -c 1-6 
 else
-    printf "Shell:%-6s" ; ps -p $$ -o 'comm=' | tr '\n' ' ' ; printf "\n"
+    printf "Shell:%-6s" ; ps -p $$ -o 'comm=' 
 fi
 
 
@@ -83,18 +83,18 @@ fi
 #CPU 
 if [ "lscpu | grep 'Model name' == AMD A4-6300" ]; then
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #shortened
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz\n" #short
 else
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz" | tr '\n' ' ' ; printf "\n" #normal output
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz\n" #long output
 fi
 
 
 #GPU
 if [ "lspci | grep 'VGA' == AMD 8370D" ]; then
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #shortened
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
 else
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #normal output
+    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
 fi
 
 
