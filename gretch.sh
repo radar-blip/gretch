@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 # gretch 
 # system info gathering script
 
