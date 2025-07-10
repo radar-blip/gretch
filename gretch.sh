@@ -91,11 +91,9 @@ fi
 
 
 #GPU
-if [ "AMD 8370D" ]; then
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
-else
-    printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
-fi
+printf "GPU:%-7s" 
+lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //'
+
 
 
 #memory (in mebibytes)
