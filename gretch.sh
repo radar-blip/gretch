@@ -26,7 +26,7 @@ printf "Version:%-4s" ; cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -
 
 
 #desktop environment
-if [ $DESKTOP_SESSION == 'cinnamon' ]; then
+if [ $DESKTOP_SESSION == "cinnamon" ]; then
     printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'c' 'C'
 else
     printf "DE:%-9s$DESKTOP_SESSION\n"
@@ -43,7 +43,7 @@ printf "Uptime:%-5s" ; uptime -p | cut -c 4-
 
 #shell
 var=bash
-if [ $var == 'bash' ]; then
+if [ $var == "bash" ]; then
     printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) | tr '\n' ' '
     printf "$BASH_VERSION" | cut -c 1-6 
 else
@@ -72,7 +72,7 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 
 #packages
-if [ "flatpak list | wc -l < 1" ]; then
+if [ $(flatpak list | wc -l) -eq 0 ]; then
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg)\n" 
 else
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg), "
@@ -81,7 +81,7 @@ fi
 
 
 #CPU 
-if [ 'AMD A4-6300' ]; then
+if [ "AMD A4-6300" ]; then
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
                         lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz\n" #short
 else
@@ -91,7 +91,7 @@ fi
 
 
 #GPU
-if [ 'AMD 8370D' ]; then
+if [ "AMD 8370D" ]; then
     printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d "." -f 3 | tr -d "[]" | tr '/' ' ' | sed 's/Richland //' #short
 else
     printf "GPU:%-7s" ; lspci | grep 'VGA' | cut -d ":" -f 3 | tr -d "[]" #long output
