@@ -91,13 +91,13 @@ fi
 
 
 #GPU
-printf "GPU:%-8s" 
-lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1'
+printf "GPU:%-7s" 
+lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //'
 
 #VRAM
 vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
 if [ -n "$vram" ]; then
-    printf "VRAM:%-7s%s MiB\n" "" "$vram"
+    printf "VRAM:     $vram MiB\n"
 fi
 
 
