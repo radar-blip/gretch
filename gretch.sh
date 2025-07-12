@@ -52,7 +52,10 @@ fi
 
 
 #WM (window manager)
-printf "WM:%-8s" ; wmctrl -m | grep Name | cut -d ":" -f 2
+wman=$(wmctrl -m | grep Name | cut -d ":" -f 2 2>/dev/null)
+if [ -n "$wman" ]; then
+    printf "WM:%-8s%s\n" "" "$wman"
+fi
 
 
 #theme
@@ -64,7 +67,10 @@ printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cu
 
 
 #desktop theme
-printf "Desktop:%-4s" ; gsettings get org.cinnamon.theme name | tr -d "''"
+dtheme=$(gsettings get org.cinnamon.theme name | tr -d "''" 2>/dev/null)
+if [ -n "$dtheme" ]; then
+    printf "Desktop:%-4s%s\n" "" "$dtheme"
+fi
 
 
 #resolution
@@ -93,6 +99,7 @@ fi
 #GPU
 printf "GPU:%-8s" 
 lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1'
+
 
 #VRAM
 vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
