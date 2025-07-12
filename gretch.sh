@@ -66,13 +66,6 @@ printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d 
 printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
 
 
-#desktop theme
-dtheme=$(gsettings get org.cinnamon.theme name | tr -d "''" 2>/dev/null)
-if [ -n "$dtheme" ]; then
-    printf "Desktop:%-4s%s\n" "" "$dtheme"
-fi
-
-
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
@@ -89,10 +82,10 @@ fi
 #CPU 
 if [ "AMD A4-6300" ]; then
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " Mhz\n" #short
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' ; printf " MHz\n" #short
 else
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " Mhz\n" #long output
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' ; printf " MHz\n" #long output
 fi
 
 
@@ -102,23 +95,9 @@ lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1'
 
 
 #VRAM
-vram=""
-gpu_vendor=$(lspci | grep -E 'VGA|3D' | grep -i 'nvidia')
-if [ -n "$gpu_vendor" ]; then
-    vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
-    if [ -n "$vram" ]; then
-        printf "VRAM:%-7s%s MiB\n" "" "$vram"
-    fi
-else
-    gpu_vendor=$(lspci | grep -E 'VGA|3D' | grep -i 'amd\|ati')
-    if [ -n "$gpu_vendor" ]; then
-        # VRAM size for AMD GPU from (It's mostly present in the path below)/sys
-        amd_vram=$(cat /sys/class/drm/*/device/mem_info_vram_total 2>/dev/null | head -n 1)
-        if [ -n "$amd_vram" ]; then
-            amd_vram_mib=$(( amd_vram / 1024 / 1024 ))
-            printf "VRAM:%-7s%s MiB\n" "" "$amd_vram_mib"
-        fi
-    fi
+vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
+if [ -n "$vram" ]; then
+    printf "VRAM:%-7s%s MiB\n" "" "$vram"
 fi
 
 
