@@ -95,9 +95,23 @@ printf "GPU:%-8s"
 lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1'
 
 #VRAM
-vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
-if [ -n "$vram" ]; then
-    printf "VRAM:%-7s%s MiB\n" "" "$vram"
+vram=""
+gpu_vendor=$(lspci | grep -E 'VGA|3D' | grep -i 'nvidia')
+if [ -n "$gpu_vendor" ]; then
+    vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
+    if [ -n "$vram" ]; then
+        printf "VRAM:%-7s%s MiB\n" "" "$vram"
+    fi
+else
+    gpu_vendor=$(lspci | grep -E 'VGA|3D' | grep -i 'amd\|ati')
+    if [ -n "$gpu_vendor" ]; then
+        # VRAM size for AMD GPU from (It's mostly present in the path below)/sys
+        amd_vram=$(cat /sys/class/drm/*/device/mem_info_vram_total 2>/dev/null | head -n 1)
+        if [ -n "$amd_vram" ]; then
+            amd_vram_mib=$(( amd_vram / 1024 / 1024 ))
+            printf "VRAM:%-7s%s MiB\n" "" "$amd_vram_mib"
+        fi
+    fi
 fi
 
 
