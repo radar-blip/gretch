@@ -59,11 +59,11 @@ fi
 
 
 #theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n" 
+printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
 
 
-#icons 
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '\n"' ' ' ; printf "\b[GTK2/3]\n"
+#icons
+printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
 
 
 #resolution
@@ -72,10 +72,10 @@ printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
 #packages
 if [ $(flatpak list | wc -l) -eq 0 ]; then
-    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg)\n" 
+    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg)/' 
 else
-    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | tr '\n' ' ' ; printf "(dpkg), "
-                             flatpak list | wc -l | tr '\n' ' ' ; printf "(flatpak)\n" 
+    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg),/' | tr '\n' ' '
+                             flatpak list | wc -l | sed 's/$/ (flatpak)/'
 fi
 
 
