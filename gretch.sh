@@ -72,6 +72,12 @@ printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d 
 printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
 
 
+#desktop theme
+dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null)
+if [ -n "$dtheme" ]; then
+    printf "Desktop:%-4s%s\n" "" "$dtheme" | tr -d "''"
+fi
+
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
 
