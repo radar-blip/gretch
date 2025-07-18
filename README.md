@@ -25,7 +25,15 @@ Note: you may need to change permission by typing: `chmod +x gretch.sh`
 Of course, you can save the files to a location of your choice (e.g. bin/bash)
 
 <br />
- 
+
+**Notes:**  
+WM (window manager) - If wmctrl is not installed, error message will display: 'wmctrl not installed'.  
+If you choose to install wmctrl, window manager will display normally.  
+
+Desktop theme is cinnamon specific as it was not easy to make this work on all versions.  
+Desktop theme output will simply be suppressed (skipped) unless you happen to be using Linux Mint Cinnamon Edition.  
+
+<br />
 
 **Optional***  
 This can be made to run everytime you open your terminal  
