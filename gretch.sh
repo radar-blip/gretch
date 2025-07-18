@@ -25,7 +25,7 @@ printf "OS:%-9s" ; cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2
 printf "Version:%-4s" ; cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2
 
 
-#desktop environment
+#DE (desktop environment)
 if [ $DESKTOP_SESSION == "cinnamon" ]; then
     printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'c' 'C'
 elif [ $DESKTOP_SESSION == "mate" ]; then
@@ -58,9 +58,11 @@ fi
 
 
 #WM (window manager)
-wman=$(wmctrl -m | grep Name | cut -d ":" -f 2 2>/dev/null)
+wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2 )
 if [ -n "$wman" ]; then
     printf "WM:%-8s%s\n" "" "$wman"
+else
+    printf "WM:%-9s%s\n" "" "wmctrl not installed"
 fi
 
 
@@ -72,11 +74,12 @@ printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d 
 printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
 
 
-#desktop theme
-dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null)
+#desktop theme (no output if not found)
+dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 if [ -n "$dtheme" ]; then
-    printf "Desktop:%-4s%s\n" "" "$dtheme" | tr -d "''"
+    printf "Desktop:%-4s%s\n" "" "$dtheme"
 fi
+
 
 #resolution
 printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
