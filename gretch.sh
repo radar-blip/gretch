@@ -18,11 +18,17 @@ printf "\n"
 
 
 #OS name
-printf "OS:%-9s" ; cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2
+os=$(cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2)
+if [ -n "$os" ]; then
+    printf "OS:%-9s%s\n" "" "$os"
+fi
 
 
 #OS version
-printf "Version:%-4s" ; cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2
+ver=$(cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2)
+if [ -n "$ver" ]; then
+    printf "Version:%-4s%s\n" "" "$ver"
+fi 
 
 
 #DE (desktop environment)
@@ -39,15 +45,15 @@ else
 fi
 
 
-#kernel
+#Kernel
 printf "Kernel:%-5s" ; uname -r
 
 
-#uptime
+#Uptime
 printf "Uptime:%-5s" ; uptime -p | cut -c 4-
 
 
-#shell
+#Shell
 var=bash
 if [ $var == "bash" ]; then
     printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) | tr '\n' ' '
@@ -66,26 +72,35 @@ else
 fi
 
 
-#theme
-printf "Theme:%-4s" ; gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
+#Theme
+theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
+if [ -n "$theme" ]; then
+    printf "Theme:%-4s%s\n" "" "$theme"
+fi
 
 
-#icons
-printf "Icons:%-4s" ; gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' '
+#Icons
+icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
+if [ -n "$icons" ]; then
+    printf "Icons:%-4s%s\n" "" "$icons"
+fi
 
 
-#desktop theme (no output if not found)
+#Desktop theme (no output if not found)
 dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 if [ -n "$dtheme" ]; then
     printf "Desktop:%-4s%s\n" "" "$dtheme"
 fi
 
 
-#resolution
-printf "Resolution:%-1s" ; xdpyinfo | awk '/dimensions/ {print $2}'
+#Resolution
+res=$(xdpyinfo | awk '/dimensions/ {print $2}')
+if [ -n $"res" ]; then
+    printf "Resolution:%-1s%s\n" "" "$res"
+fi
 
 
-#packages
+#Packages
 if [ $(flatpak list | wc -l) -eq 0 ]; then
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg)/' 
 else
@@ -116,7 +131,7 @@ if [ -n "$vram" ]; then
 fi
 
 
-#memory (in mebibytes)
+#Memory (in mebibytes)
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//'
                         free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /') | tr '\n' ' '
 
