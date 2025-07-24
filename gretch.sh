@@ -32,16 +32,19 @@ fi
 
 
 #DE (desktop environment)
-if [ $DESKTOP_SESSION == "cinnamon" ]; then
-    printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'c' 'C'
-elif [ $DESKTOP_SESSION == "mate" ]; then
-    printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'm' 'M'
-elif [ $DESKTOP_SESSION == "xfce" ]; then
-    printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'x' 'X'
-elif [ $DESKTOP_SESSION == "debian" ]; then
-    printf "DE:%-9s$DESKTOP_SESSION\n" | tr 'd' 'D'
+list=(cinnamon mate xfce debian)
+set -- $list
+den="$DESKTOP_SESSION"
+if [ "$den" == $1 ]; then
+    printf "DE:%-9s%s\n" "" "$den" | tr 'c' 'C'
+elif [ "$den" == $2 ]; then
+    printf "DE:%-9s%s\n" "" "$den" | tr 'm' 'M'
+elif [ "$den" == $3 ]; then
+    printf "DE:%-9s%s\n" "" "$den" | tr 'x' 'X'
+elif [ "$den" == $4 ]; then
+    printf "DE:%-9s%s\n" "" "$den" | tr 'd' 'D'
 else
-    printf "DE:%-9s$DESKTOP_SESSION\n"
+    printf "DE:%-9s$den\n"
 fi
 
 
@@ -120,8 +123,10 @@ fi
 
 
 #GPU
-printf "GPU:%-8s" 
-lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1'
+gpu=$(lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1')
+if [ -n "$gpu" ]; then
+    printf "GPU:%-8s%s\n" "" "$gpu"
+fi
 
 
 #VRAM
@@ -135,7 +140,5 @@ fi
 (printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//'
                         free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /') | tr '\n' ' '
 
-
 printf "${norm}\n\n"
-
 
