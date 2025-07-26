@@ -2,6 +2,7 @@
 # gretch 
 # system info gathering script
 
+
 bold=$(tput bold)
 norm=$(tput sgr0)
 yell=$(tput setaf 3)
@@ -17,14 +18,14 @@ printf '%s' "$where" | tr "$where" '-' | awk '{print $0"--"}'
 printf "\n"
 
 
-#OS name
+#OS Name
 os=$(cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2)
 if [ -n "$os" ]; then
     printf "OS:%-9s%s\n" "" "$os"
 fi
 
 
-#OS version
+#OS Version
 ver=$(cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2)
 if [ -n "$ver" ]; then
     printf "Version:%-4s%s\n" "" "$ver"
@@ -32,16 +33,16 @@ fi
 
 
 #DE (desktop environment)
-list=(cinnamon mate xfce debian)
-set -- $list
+version=(cinnamon mate xfce debian)
+set -- $version
 den="$DESKTOP_SESSION"
-if [ "$den" == $1 ]; then
+if [[ "$den" == $1 ]]; then
     printf "DE:%-9s%s\n" "" "$den" | tr 'c' 'C'
-elif [ "$den" == $2 ]; then
+elif [[ "$den" == $2 ]]; then
     printf "DE:%-9s%s\n" "" "$den" | tr 'm' 'M'
-elif [ "$den" == $3 ]; then
+elif [[ "$den" == $3 ]]; then
     printf "DE:%-9s%s\n" "" "$den" | tr 'x' 'X'
-elif [ "$den" == $4 ]; then
+elif [[ "$den" == $4 ]]; then
     printf "DE:%-9s%s\n" "" "$den" | tr 'd' 'D'
 else
     printf "DE:%-9s$den\n"
@@ -49,11 +50,17 @@ fi
 
 
 #Kernel
-printf "Kernel:%-5s" ; uname -r
+kern=$(uname -r)
+if [ -n $kern ]; then
+    printf "Kernel:%-5s%s\n" "" "$kern"
+fi
 
 
 #Uptime
-printf "Uptime:%-5s" ; uptime -p | cut -c 4-
+utime=$(uptime -p | cut -c 4-)
+if [[ -n $utime ]]; then
+    printf "Uptime:%-5s%s\n" "" "$utime"
+fi
 
 
 #Shell
