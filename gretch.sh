@@ -121,8 +121,8 @@ fi
 
 #CPU
 if [ "AMD A4-6300" ]; then
-    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*/@/' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf substr($0, 1, length($0)-5)}' | sed 's/$/ MHz\n/' #short
+    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
+                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' | sed 's/$/ MHz\n/' #short
 else
     printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
                         lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' | sed 's/$/ MHz\n/' #long output
