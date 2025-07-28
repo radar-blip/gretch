@@ -20,14 +20,14 @@ printf "\n"
 
 #OS Name
 os=$(cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2)
-if [ -n "$os" ]; then
+if [[ -n "$os" ]]; then
     printf "OS:%-9s%s\n" "" "$os"
 fi
 
 
 #OS Version
 ver=$(cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2)
-if [ -n "$ver" ]; then
+if [[ -n "$ver" ]]; then
     printf "Version:%-4s%s\n" "" "$ver"
 fi 
 
@@ -51,7 +51,7 @@ fi
 
 #Kernel
 kern=$(uname -r)
-if [ -n $kern ]; then
+if [[ -n $kern ]]; then
     printf "Kernel:%-5s%s\n" "" "$kern"
 fi
 
@@ -65,7 +65,7 @@ fi
 
 #Shell
 var=bash
-if [ $var == "bash" ]; then
+if [[ $var == "bash" ]]; then
     printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) | tr '\n' ' '
     printf "$BASH_VERSION" | cut -c 1-6 
 else
@@ -75,7 +75,7 @@ fi
 
 #WM (window manager)
 wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2 )
-if [ -n "$wman" ]; then
+if [[ -n "$wman" ]]; then
     printf "WM:%-8s%s\n" "" "$wman"
 else
     printf "WM:%-9s%s\n" "" "wmctrl not installed"
@@ -84,34 +84,34 @@ fi
 
 #Theme
 theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
-if [ -n "$theme" ]; then
+if [[ -n "$theme" ]]; then
     printf "Theme:%-4s%s\n" "" "$theme"
 fi
 
 
 #Icons
 icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
-if [ -n "$icons" ]; then
+if [[ -n "$icons" ]]; then
     printf "Icons:%-4s%s\n" "" "$icons"
 fi
 
 
 #Desktop theme (no output if not found)
 dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
-if [ -n "$dtheme" ]; then
+if [[ -n "$dtheme" ]]; then
     printf "Desktop:%-4s%s\n" "" "$dtheme"
 fi
 
 
 #Resolution
 res=$(xdpyinfo | awk '/dimensions/ {print $2}')
-if [ -n $"res" ]; then
+if [[ -n $"res" ]]; then
     printf "Resolution:%-1s%s\n" "" "$res"
 fi
 
 
 #Packages
-if [ $(flatpak list | wc -l) -eq 0 ]; then
+if [[ $(flatpak list | wc -l) -eq 0 ]]; then
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg)/' 
 else
     printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg),/' | tr '\n' ' '
@@ -120,25 +120,27 @@ fi
 
 
 #CPU
-if [ "AMD A4-6300" ]; then
-    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | sed 's/w.*//' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "\b@ " substr($0, 1, length($0)-5)}' | sed 's/$/ MHz\n/' #short
+cpuamd=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' ' | sed 's/$/@ /'
+         lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1 | sed 's/$/ MHz\n/')
+cpu=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' ' | sed 's/$/@ /'
+      lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1 | sed 's/$/ MHz\n/')
+if [[ "AMD" ]]; then
+    printf "CPU:%-8s%s\n" "" "$cpuamd"  
 else
-    printf "CPU:%-8s" ; lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '
-                        lscpu | grep 'max' | cut -d ":" -f 2 | awk '{$1=$1}1' | awk '{printf "@ " substr($0, 1, length($0)-5)}' | sed 's/$/ MHz\n/' #long output
+    printf "CPU:%-8s%s\n" "" "$cpu"  
 fi
 
 
 #GPU
 gpu=$(lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1')
-if [ -n "$gpu" ]; then
+if [[ -n "$gpu" ]]; then
     printf "GPU:%-8s%s\n" "" "$gpu"
 fi
 
 
 #VRAM
 vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
-if [ -n "$vram" ]; then
+if [[ -n "$vram" ]]; then
     printf "VRAM:%-7s%s MiB\n" "" "$vram"
 fi
 
