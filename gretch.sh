@@ -33,19 +33,19 @@ fi
 
 
 #DE (desktop environment)
-version=(cinnamon mate xfce debian)
-set -- $version
-den="$DESKTOP_SESSION"
-if [[ "$den" == $1 ]]; then
-    printf "DE:%-9s%s\n" "" "$den" | tr 'c' 'C'
-elif [[ "$den" == $2 ]]; then
-    printf "DE:%-9s%s\n" "" "$den" | tr 'm' 'M'
-elif [[ "$den" == $3 ]]; then
-    printf "DE:%-9s%s\n" "" "$den" | tr 'x' 'X'
-elif [[ "$den" == $4 ]]; then
-    printf "DE:%-9s%s\n" "" "$den" | tr 'd' 'D'
+env="cinnamon mate xfce debian"
+set -- $env
+comm="$DESKTOP_SESSION"
+if [[ "$comm" == $1 ]]; then
+    printf "DE:%-9s%s\n" "" "$comm" | tr 'c' 'C'
+elif [[ "$comm" == $2 ]]; then
+    printf "DE:%-9s%s\n" "" "$comm" | tr 'm' 'M'
+elif [[ "$comm" == $3 ]]; then
+    printf "DE:%-9s%s\n" "" "$comm" | tr 'x' 'X'
+elif [[ "$comm" == $4 ]]; then
+    printf "DE:%-9s%s\n" "" "$comm" | tr 'd' 'D'
 else
-    printf "DE:%-9s$den\n"
+    printf "DE:%-9s$comm\n"
 fi
 
 
@@ -83,16 +83,16 @@ fi
 
 
 #Theme
-theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
+theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr '"' ' ')
 if [[ -n "$theme" ]]; then
-    printf "Theme:%-4s%s\n" "" "$theme"
+    printf "Theme:%-4s%s[GTK2/3]\n" "" "$theme"
 fi
 
 
 #Icons
-icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | sed 's/$/[GTK2\/3] /' | tr '"' ' ')
+icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '"' ' ')
 if [[ -n "$icons" ]]; then
-    printf "Icons:%-4s%s\n" "" "$icons"
+    printf "Icons:%-4s%s[GTK2/3]\n" "" "$icons"
 fi
 
 
@@ -120,14 +120,14 @@ fi
 
 
 #CPU
-cpuamd=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' ' | sed 's/$/@ /'
-         lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1 | sed 's/$/ MHz\n/')
-cpu=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' ' | sed 's/$/@ /'
-      lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1 | sed 's/$/ MHz\n/')
+cpuamd=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' '; printf "@ "
+         lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
+cpu=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '; printf "@ "
+      lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 if [[ "AMD" ]]; then
-    printf "CPU:%-8s%s\n" "" "$cpuamd"  
+    printf "CPU:%-8s%s MHz\n" "" "$cpuamd"  
 else
-    printf "CPU:%-8s%s\n" "" "$cpu"  
+    printf "CPU:%-8s%s MHz\n" "" "$cpu"  
 fi
 
 
@@ -146,8 +146,11 @@ fi
 
 
 #Memory (in mebibytes)
-(printf "Memory:%-5s" ; free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//'
-                        free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /') | tr '\n' ' '
+mem=$(free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//' | tr '\n' ' '
+      free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /')
+if [[ "$mem" ]]; then
+    printf "Memory:%-5s%s\n" "" "$mem" 
+fi
 
 printf "${norm}\n\n"
 
