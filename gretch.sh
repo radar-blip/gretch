@@ -33,20 +33,7 @@ fi
 
 
 #DE (desktop environment)
-env="cinnamon mate xfce debian"
-set -- $env
-comm="$DESKTOP_SESSION"
-if [[ "$comm" == $1 ]]; then
-    printf "DE:%-9s%s\n" "" "$comm" | tr 'c' 'C'
-elif [[ "$comm" == $2 ]]; then
-    printf "DE:%-9s%s\n" "" "$comm" | tr 'm' 'M'
-elif [[ "$comm" == $3 ]]; then
-    printf "DE:%-9s%s\n" "" "$comm" | tr 'x' 'X'
-elif [[ "$comm" == $4 ]]; then
-    printf "DE:%-9s%s\n" "" "$comm" | tr 'd' 'D'
-else
-    printf "DE:%-9s$comm\n"
-fi
+printf "DE:%-9s%s\n" "" "${DESKTOP_SESSION^}"
 
 
 #Kernel
