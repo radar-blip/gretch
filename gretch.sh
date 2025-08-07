@@ -19,21 +19,24 @@ printf "\n"
 
 
 #OS Name
-os=$(cat /etc/os-release | grep -m 1 'NAME' | cut -d '"' -f 2)
+os=$(grep '^NAME=' /etc/os-release | cut -d '"' -f 2)
 if [[ -n "$os" ]]; then
     printf "OS:%-9s%s\n" "" "$os"
 fi
 
 
 #OS Version
-ver=$(cat /etc/os-release | grep -m 1 'VERSION' | cut -d '"' -f 2)
+ver=$(grep '^VERSION=' /etc/os-release | cut -d '"' -f 2)
 if [[ -n "$ver" ]]; then
     printf "Version:%-4s%s\n" "" "$ver"
 fi 
 
 
 #DE (desktop environment)
-printf "DE:%-9s%s\n" "" "${DESKTOP_SESSION^}"
+de=${XDG_CURRENT_DESKTOP,,}
+if [[ -n "$de" ]]; then
+    printf "DE:%-9s%s\n" "" "${de^}"
+fi
 
 
 #Kernel
