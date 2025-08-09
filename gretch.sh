@@ -21,41 +21,41 @@ printf "\n"
 #OS Name
 os=$(grep '^NAME=' /etc/os-release | cut -d '"' -f 2)
 if [[ -n "$os" ]]; then
-    printf "OS:%-9s%s\n" "" "$os"
+    printf "%-11s %s\n" "OS:" "$os"
 fi
 
 
 #OS Version
 ver=$(grep '^VERSION=' /etc/os-release | cut -d '"' -f 2)
 if [[ -n "$ver" ]]; then
-    printf "Version:%-4s%s\n" "" "$ver"
+    printf "%-11s %s\n" "Version:" "$ver"
 fi 
 
 
 #DE (desktop environment)
 de=${XDG_CURRENT_DESKTOP,,}
 if [[ -n "$de" ]]; then
-    printf "DE:%-9s%s\n" "" "${de^}"
+    printf "%-11s %s\n" "DE:" "${de^}"
 fi
 
 
 #Kernel
 kern=$(uname -r)
 if [[ -n $kern ]]; then
-    printf "Kernel:%-5s%s\n" "" "$kern"
+    printf "%-11s %s\n" "Kernel:" "$kern"
 fi
 
 
 #Uptime
 utime=$(uptime -p | cut -c 4-)
 if [[ -n $utime ]]; then
-    printf "Uptime:%-5s%s\n" "" "$utime"
+    printf "%-11s %s\n" "Uptime:" "$utime"
 fi
 
 
 #Shell
-var=bash
-if [[ $var == "bash" ]]; then
+she=bash
+if [[ $she == "bash" ]]; then
     printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) | tr '\n' ' '
     printf "$BASH_VERSION" | cut -c 1-6 
 else
@@ -64,39 +64,39 @@ fi
 
 
 #WM (window manager)
-wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2 )
+wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2)
 if [[ -n "$wman" ]]; then
-    printf "WM:%-8s%s\n" "" "$wman"
+    printf "%-10s %s\n" "WM:" "$wman"
 else
-    printf "WM:%-9s%s\n" "" "wmctrl not installed"
+    printf "%-11s %s\n" "WM:" "wmctrl not installed"
 fi
 
 
 #Theme
-theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr '"' ' ')
+theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr -d '"')
 if [[ -n "$theme" ]]; then
-    printf "Theme:%-4s%s[GTK2/3]\n" "" "$theme"
+    printf "%-10s %s %s\n" "Theme:" "$theme" "[GTK2/3]"
 fi
 
 
 #Icons
-icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr '"' ' ')
+icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr -d '"')
 if [[ -n "$icons" ]]; then
-    printf "Icons:%-4s%s[GTK2/3]\n" "" "$icons"
+    printf "%-10s %s %s\n" "Icons:" "$icons" "[GTK2/3]"
 fi
 
 
 #Desktop theme (no output if not found)
 dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 if [[ -n "$dtheme" ]]; then
-    printf "Desktop:%-4s%s\n" "" "$dtheme"
+    printf "%-11s %s\n" "Desktop:" "$dtheme"
 fi
 
 
 #Resolution
 res=$(xdpyinfo | awk '/dimensions/ {print $2}')
 if [[ -n $"res" ]]; then
-    printf "Resolution:%-1s%s\n" "" "$res"
+    printf "%-11s %s\n" "Resolution:" "$res"
 fi
 
 
@@ -115,23 +115,23 @@ cpuamd=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '
 cpu=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '; printf "@ "
       lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 if [[ "AMD" ]]; then
-    printf "CPU:%-8s%s MHz\n" "" "$cpuamd"  
+    printf "%-11s %s %s\n" "CPU:" "$cpuamd" "MHz" 
 else
-    printf "CPU:%-8s%s MHz\n" "" "$cpu"  
+    printf "%-11s %s %s\n" "CPU:" "$cpu" "MHz"  
 fi
 
 
 #GPU
 gpu=$(lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1')
 if [[ -n "$gpu" ]]; then
-    printf "GPU:%-8s%s\n" "" "$gpu"
+    printf "%-11s %s\n" "GPU:" "$gpu"
 fi
 
 
 #VRAM
 vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
 if [[ -n "$vram" ]]; then
-    printf "VRAM:%-7s%s MiB\n" "" "$vram"
+    printf "%-11s %s %s\n" "VRAM:" "$vram" "MiB"
 fi
 
 
@@ -139,7 +139,7 @@ fi
 mem=$(free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//' | tr '\n' ' '
       free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /')
 if [[ "$mem" ]]; then
-    printf "Memory:%-5s%s\n" "" "$mem" 
+    printf "%-11s %s\n" "Memory:" "$mem" 
 fi
 
 printf "${norm}\n\n"
