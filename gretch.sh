@@ -136,10 +136,10 @@ fi
 
 
 #Memory (in mebibytes)
-mem=$(free -m | grep -oP '\d+' | sed '2!d' | sed 's/$/MiB \//' | tr '\n' ' '
-      free -m | grep -oP '\d+' | sed '1!d' | sed 's/$/MiB /')
-if [[ "$mem" ]]; then
-    printf "%-11s %s\n" "Memory:" "$mem" 
+memused=$(free -m | grep -oP '\d+' | sed '2!d')
+memtotal=$(free -m | grep -oP '\d+' | sed '1!d')
+if [[ "$memused" ]] && [[ "$memtotal" ]]; then
+    printf "%-11s %s%s %s %s%s" "Memory:" "$memused" "MiB" "/" "$memtotal" "MiB"
 fi
 
 printf "${norm}\n\n"
