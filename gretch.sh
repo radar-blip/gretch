@@ -110,14 +110,14 @@ fi
 
 
 #CPU
-cpuamd=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' '; printf "@ "
-         lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
-cpu=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' '; printf "@ "
-      lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
+amd_model_yes=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' ')
+amd_speed_yes=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
+amd_model_no=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' ')
+amd_speed_no=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 if [[ "AMD" ]]; then
-    printf "%-11s %s %s\n" "CPU:" "$cpuamd" "MHz" 
+    printf "%-11s %s%s %s %s\n" "CPU:" "$amd_model_yes" "@" "$amd_speed_yes" "MHz" 
 else
-    printf "%-11s %s %s\n" "CPU:" "$cpu" "MHz"  
+    printf "%-11s %s%s %s %s\n" "CPU:" "$amd_model_no" "@" "$amd_speed_no" "MHz" 
 fi
 
 
