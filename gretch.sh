@@ -54,12 +54,13 @@ fi
 
 
 #Shell
-she=bash
-if [[ $she == "bash" ]]; then
-    printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) | tr '\n' ' '
-    printf "$BASH_VERSION" | cut -c 1-6 
+shell=bash
+var1=$(basename $(readlink /proc/$$/exe))
+var2=$(echo "$BASH_VERSION" | cut -c 1-6) 
+if [[ $shell == "bash" ]]; then
+    printf "%-11s %s %s\n" "Shell:" "$var1" "$var2" 
 else
-    printf "Shell:%-6s" ; basename $(readlink /proc/$$/exe) 
+    printf "%-11s %s\n" "Shell:" "$var1"
 fi
 
 
@@ -101,11 +102,12 @@ fi
 
 
 #Packages
+packages=$(dpkg --get-selections | wc -l)
+flatpaks=$(flatpak list | wc -l)
 if [[ $(flatpak list | wc -l) -eq 0 ]]; then
-    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg)/' 
+    printf "%-11s %s %s\n" "Packages:" "$packages" "(dpkg)"  
 else
-    printf "Packages:%-3s" ; dpkg --get-selections | wc -l | sed 's/$/ (dpkg),/' | tr '\n' ' '
-                             flatpak list | wc -l | sed 's/$/ (flatpak)/'
+    printf "%-11s %s %s %s %s\n" "Packages:" "$packages" "(dpkg)," "$flatpaks" "(flatpak)"  
 fi
 
 
