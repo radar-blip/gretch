@@ -7,15 +7,15 @@ bold=$(tput bold)
 norm=$(tput sgr0)
 yell=$(tput setaf 3)
 
+
 clear
 printf "${bold}"
 
-whom=$(id -u -n)
-where=$(hostname)
-printf '%s' "$whom" "@" "$where" 
-printf '%s' "$whom" | tr "$whom" '\n-' 
-printf '%s' "$where" | tr "$where" '-' | awk '{print $0"--"}'
-printf "\n"
+
+#User/Hostname
+ghost=$(id -u -n && hostname)
+printf "$ghost" | tr '\n' '@'
+printf "\n${ghost//?/-}\n\n"
 
 
 #OS Name
