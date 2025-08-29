@@ -54,10 +54,9 @@ fi
 
 
 #Shell
-shell=bash
-var1=$(basename $(readlink /proc/$$/exe))
-var2=$(echo "$BASH_VERSION" | cut -c 1-6) 
-if [[ $shell == "bash" ]]; then
+var1=$(basename "$SHELL") 
+if [[ $var1 == "bash" ]]; then
+    var2=$(echo "$BASH_VERSION" | cut -c 1-6)
     printf "%-11s %s %s\n" "Shell:" "$var1" "$var2" 
 else
     printf "%-11s %s\n" "Shell:" "$var1"
