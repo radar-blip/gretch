@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # gretch 
 # system info gathering script
+# for linux
 
 
 bold=$(tput bold)
@@ -18,18 +19,11 @@ printf "$ghost" | tr '\n' '@'
 printf "\n${ghost//?/-}\n\n"
 
 
-#OS Name
-os=$(grep '^NAME=' /etc/os-release | cut -d '"' -f 2)
-if [[ -n "$os" ]]; then
-    printf "%-11s %s\n" "OS:" "$os"
+#OS Name/Version
+osname=$(grep -E '^NAME=|^VERSION=' /etc/os-release | cut -d '"' -f 2 | tr '\n' ' ')
+if [[ -n "$osname" ]]; then
+    printf "%-11s %s\n" "OS:" "$osname"
 fi
-
-
-#OS Version
-ver=$(grep '^VERSION=' /etc/os-release | cut -d '"' -f 2)
-if [[ -n "$ver" ]]; then
-    printf "%-11s %s\n" "Version:" "$ver"
-fi 
 
 
 #DE (desktop environment)
@@ -52,7 +46,7 @@ if [[ -n $utime ]]; then
     printf "%-11s %s\n" "Uptime:" "$utime"
 fi
 
-
+    
 #Shell
 var1=$(basename "$SHELL") 
 if [[ $var1 == "bash" ]]; then
@@ -62,7 +56,7 @@ else
     printf "%-11s %s\n" "Shell:" "$var1"
 fi
 
-
+    
 #WM (window manager)
 wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2)
 if [[ -n "$wman" ]]; then
