@@ -69,14 +69,14 @@ fi
 #Theme
 theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr -d '"')
 if [[ -n "$theme" ]]; then
-    printf "%-10s %s %s\n" "Theme:" "$theme" "[GTK2/3]"
+    printf "%-10s %s %s\n" "Theme:" "$theme [GTK2/3]"
 fi
 
 
 #Icons
 icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr -d '"')
 if [[ -n "$icons" ]]; then
-    printf "%-10s %s %s\n" "Icons:" "$icons" "[GTK2/3]"
+    printf "%-10s %s %s\n" "Icons:" "$icons [GTK2/3]"
 fi
 
 
@@ -112,9 +112,9 @@ amd_model_no=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr
 amd_speed_no=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 mhz_to_ghz=$(echo "scale=3; $amd_speed_no / 1000" | bc)
 if [[ "AMD" ]]; then
-    printf "%-11s %s%s %s %s\n" "CPU:" "$amd_model_yes" "@" "$mhz_to_ghz" "GHz" 
+    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_yes" "@" "$mhz_to_ghz GHz" 
 else
-    printf "%-11s %s%s %s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz" "GHz" 
+    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz GHz" 
 fi
 
 
@@ -133,11 +133,9 @@ fi
 
 
 #Memory (in mebibytes)
-memused=$(free -m | grep -oP '\d+' | sed '2!d')
-memtotal=$(free -m | grep -oP '\d+' | sed '1!d')
-if [[ "$memused" ]] && [[ "$memtotal" ]]; then
-    printf "%-11s %s%s %s %s%s" "Memory:" "$memused" "MiB" "/" "$memtotal" "MiB"
-fi
+mem_used=$(free -m | awk 'NR==2{print $3}')
+mem_total=$(free -m | awk 'NR==2{print $2}')
+printf "%-11s %s %s %s" "Memory:" "${mem_used}MiB" "/" "${mem_total}MiB"
 
 printf "${norm}\n\n"
 
