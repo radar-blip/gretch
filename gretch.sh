@@ -43,13 +43,15 @@ utime=$(uptime -p | cut -c 4-)
 var1=$(basename "$SHELL") 
 var2=$(basename "$BASH_VERSION" | cut -c 1-6)
 [[ $var1 == "bash" ]] && \
-    printf "%-11s %s %s\n" "Shell:" "$var1" "$var2" || printf "%-11s %s\n" "Shell:" "$var1"
+    printf "%-11s %s %s\n" "Shell:" "$var1" "$var2" || \
+    printf "%-11s %s\n" "Shell:" "$var1"
 
     
 #WM (window manager)
 wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2)
 [[ -n "$wman" ]] && \
-    printf "%-10s %s\n" "WM:" "$wman" || printf "%-11s %s\n" "WM:" "wmctrl not installed"
+    printf "%-10s %s\n" "WM:" "$wman" || \
+    printf "%-11s %s\n" "WM:" "wmctrl not installed"
 
 
 #Theme
@@ -75,11 +77,9 @@ res=$(xdpyinfo | awk '/dimensions/ {print $2}')
 #Packages
 packages=$(dpkg --get-selections | wc -l)
 flatpaks=$(flatpak list | wc -l)
-if [[ $(flatpak list | wc -l) -eq 0 ]]; then
-    printf "%-11s %s %s\n" "Packages:" "$packages" "(dpkg)"  
-else
-    printf "%-11s %s %s %s %s\n" "Packages:" "$packages" "(dpkg)," "$flatpaks" "(flatpak)"  
-fi
+[[ $(flatpak list | wc -l) -eq 0 ]] && \
+    printf "%-11s %s %s\n" "Packages:" "$packages" "(dpkg)" || \
+    printf "%-11s %s %s %s %s\n" "Packages:" "$packages" "(dpkg)," "$flatpaks" "(flatpak)"
 
 
 #CPU
@@ -89,11 +89,9 @@ mhz_to_ghz=$(echo "scale=3; $amd_speed_yes / 1000" | bc)
 amd_model_no=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' ')
 amd_speed_no=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 mhz_to_ghz=$(echo "scale=3; $amd_speed_no / 1000" | bc)
-if [[ "AMD" ]]; then
-    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_yes" "@" "$mhz_to_ghz GHz" 
-else
-    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz GHz" 
-fi
+[[ "AMD" ]] && \
+    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_yes" "@" "$mhz_to_ghz GHz" || \
+    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz GHz"
 
 
 #GPU
