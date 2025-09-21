@@ -13,68 +13,119 @@ clear
 printf "${bold}"
 
 
-#User/Hostname
+# User/Hostname
 ghost=$(id -un && hostname)
 printf "$ghost" | tr '\n' '@'
 printf "\n${ghost//?/-}\n\n"
 
 
-#OS Name/Version
+# OS Name/Version
 osname=$(grep -E '^NAME=|^VERSION=' /etc/os-release | cut -d '"' -f 2 | tr '\n' ' ')
 [[ -n "$osname" ]] && printf "%-11s %s\n" "OS:" "$osname"
 
 
-#DE (desktop environment)
-de=${XDG_CURRENT_DESKTOP,,}
-[[ -n "$de" ]] && printf "%-11s %s\n" "DE:" "${de^}"
+# DE (desktop environment)
+de=$(printf $XDG_CURRENT_DESKTOP)
+shopt -s nocasematch
+
+case "$de" in
+    gnome)
+        printf "%-11s %s\n" "DE:" "Gnome"
+        ;;
+    mate)
+        printf "%-11s %s\n" "DE:" "Mate"
+        ;;
+    xfce)
+        printf "%-11s %s\n" "DE:" "Xfce"
+        ;;
+    cinnamon | x-cinnamon)
+        printf "%-11s %s\n" "DE:" "Cinnamon"
+        ;;
+    kde)
+        printf "%-11s %s\n" "DE:" "KDE"
+        ;;
+    lxde)
+        printf "%-11s %s\n" "DE:" "LXDE"
+        ;;
+    *)
+        printf "%-11s %s\n" "DE:" "$de"
+        ;;
+esac
 
 
-#Kernel
+# Kernel
 kern=$(uname -r)
 [[ -n $kern ]] && printf "%-11s %s\n" "Kernel:" "$kern"
 
 
-#Uptime
+# Uptime
 utime=$(uptime -p | cut -c 4-)
 [[ -n $utime ]] && printf "%-11s %s\n" "Uptime:" "$utime"
 
     
-#Shell
-var1=$(basename "$SHELL") 
-var2=$(basename "$BASH_VERSION" | cut -c 1-6)
-[[ $var1 == "bash" ]] && \
-    printf "%-11s %s %s\n" "Shell:" "$var1" "$var2" || \
-    printf "%-11s %s\n" "Shell:" "$var1"
+# Shell
+sh=$(basename "$SHELL")
+sh_ver=$(basename "$BASH_VERSION" | cut -c 1-6)
+
+case "$sh" in
+    bash)
+        printf "%-11s %s\n" "Shell:" "bash $sh_ver"
+        ;;
+    sh)
+        printf "%-11s %s\n" "Shell:" "sh"
+        ;;
+    zsh)
+        printf "%-11s %s\n" "Shell:" "zsh"
+        ;;
+    fish)
+        printf "%-11s %s\n" "Shell:" "fish"
+        ;;
+    csh)
+        printf "%-11s %s\n" "Shell:" "csh"
+        ;;
+    ksh)
+        printf "%-11s %s\n" "Shell:" "ksh"
+        ;;
+    dash)
+        printf "%-11s %s\n" "Shell:" "dash"
+        ;;
+    tcsh)
+        printf "%-11s %s\n" "Shell:" "tcsh"
+        ;;
+    *)
+        printf "%-11s %s\n" "Shell:" "$sh"
+        ;;
+esac
 
     
-#WM (window manager)
+# WM (window manager)
 wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2)
 [[ -n "$wman" ]] && \
     printf "%-10s %s\n" "WM:" "$wman" || \
     printf "%-11s %s\n" "WM:" "wmctrl not installed"
 
 
-#Theme
+# Theme
 theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr -d '"')
 [[ -n "$theme" ]] && printf "%-10s %s\n" "Theme:" "$theme [GTK2/3]"
 
 
-#Icons
+# Icons
 icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr -d '"')
 [[ -n "$icons" ]] && printf "%-10s %s\n" "Icons:" "$icons [GTK2/3]"
 
 
-#Desktop theme (no output if not found)
+# Desktop theme (no output if not found)
 dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 [[ -n "$dtheme" ]] && printf "%-11s %s\n" "Desktop:" "$dtheme"
 
 
-#Resolution
+# Resolution
 res=$(xdpyinfo | awk '/dimensions/ {print $2}')
 [[ -n $"res" ]] && printf "%-11s %s\n" "Resolution:" "$res"
 
 
-#Packages
+# Packages
 packages=$(dpkg --get-selections | wc -l)
 flatpaks=$(flatpak list | wc -l)
 [[ $(flatpak list | wc -l) -eq 0 ]] && \
@@ -82,7 +133,7 @@ flatpaks=$(flatpak list | wc -l)
     printf "%-11s %s %s %s %s\n" "Packages:" "$packages" "(dpkg)," "$flatpaks" "(flatpak)"
 
 
-#CPU
+# CPU
 amd_model_yes=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' ')
 amd_speed_yes=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
 mhz_to_ghz=$(echo "scale=3; $amd_speed_yes / 1000" | bc)
@@ -94,17 +145,17 @@ mhz_to_ghz=$(echo "scale=3; $amd_speed_no / 1000" | bc)
     printf "%-11s %s%s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz GHz"
 
 
-#GPU
+# GPU
 gpu=$(lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1')
 [[ -n "$gpu" ]] && printf "%-11s %s\n" "GPU:" "$gpu"
 
 
-#VRAM
+# VRAM
 vram=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null)
 [[ -n "$vram" ]] && printf "%-11s %s %s\n" "VRAM:" "$vram" "MiB"
 
 
-#Memory (in mebibytes)
+# Memory (in mebibytes)
 mem_used=$(free -m | awk 'NR==2{print $3}')
 mem_total=$(free -m | awk 'NR==2{print $2}')
 printf "%-11s %s %s %s" "Memory:" "${mem_used}MiB" "/" "${mem_total}MiB"
