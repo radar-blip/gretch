@@ -99,7 +99,7 @@ esac
 
     
 # WM (window manager)
-wman=$(wmctrl -m 2>/dev/null | grep Name | cut -d ":" -f 2)
+wman=$(wmctrl -m 2>/dev/null | grep 'Name' | cut -d ":" -f 2)
 [[ -n "$wman" ]] && \
     printf "%-10s %s\n" "WM:" "$wman" || \
     printf "%-11s %s\n" "WM:" "wmctrl not installed"
@@ -134,15 +134,12 @@ flatpaks=$(flatpak list | wc -l)
 
 
 # CPU
-amd_model_yes=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d ' ' -f 1,2,3 | tr '\n' ' ')
-amd_speed_yes=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
-mhz_to_ghz=$(echo "scale=3; $amd_speed_yes / 1000" | bc)
-amd_model_no=$(lscpu | grep 'Model name' | cut -d ":" -f 2 | awk '{$1=$1}1' | tr '\n' ' ')
-amd_speed_no=$(lscpu | grep 'CPU max MHz' | cut -d ":" -f 2 | awk '{$1=$1}1' | cut -d '.' -f 1)
-mhz_to_ghz=$(echo "scale=3; $amd_speed_no / 1000" | bc)
+model_amd=$(lscpu | awk -F': *' '/Model name/{printf $2}' | cut -d ' ' -f 1,2,3)
+model_all=$(lscpu | awk -F': *' '/Model name/{printf $2}')
+max_ghz=$(lscpu | awk -F': *' '/CPU max MHz/{printf "@ " ($2/1000) " GHz"}')
 [[ "AMD" ]] && \
-    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_yes" "@" "$mhz_to_ghz GHz" || \
-    printf "%-11s %s%s %s\n" "CPU:" "$amd_model_no" "@" "$mhz_to_ghz GHz"
+    printf "%-11s %s %s\n" "CPU:" "$model_amd" "$max_ghz" || \
+    printf "%-11s %s %s\n" "CPU:" "$model_all" "$max_ghz"
 
 
 # GPU
