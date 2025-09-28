@@ -134,17 +134,30 @@ flatpaks=$(flatpak list | wc -l)
 
 
 # CPU
-model_amd=$(lscpu | awk -F': *' '/Model name/{printf $2}' | cut -d ' ' -f 1,2,3)
-model_all=$(lscpu | awk -F': *' '/Model name/{printf $2}')
+cpu_def=$(lscpu | awk -F': *' '/Model name/{printf $2}')
+cpu_amd=$(lscpu | awk -F': *' '/Model name/{printf $2}' | cut -d ' ' -f 1,2,3)
 max_ghz=$(lscpu | awk -F': *' '/CPU max MHz/{printf "@ " ($2/1000) " GHz"}')
-[[ "AMD" ]] && \
-    printf "%-11s %s %s\n" "CPU:" "$model_amd" "$max_ghz" || \
-    printf "%-11s %s %s\n" "CPU:" "$model_all" "$max_ghz"
+case "$cpu_amd" in
+    *amd* | *radeon* | *ryzen*)
+        printf "%-11s %s %s\n" "CPU:" "$cpu_amd" "$max_ghz"
+        ;;
+    *)
+        printf "%-11s %s %s\n" "CPU:" "$cpu_def" "$max_ghz"
+        ;;
+esac
 
 
 # GPU
-gpu=$(lspci | grep -E 'VGA|3D' | cut -d ':' -f 3 | sed 's/^ //' | awk '{$1=$1}1')
-[[ -n "$gpu" ]] && printf "%-11s %s\n" "GPU:" "$gpu"
+gpu_def=$(lspci | awk '/VGA|3D|Display/ {print $0}' | cut -d ':' -f 3 | sed 's/^ //')
+gpu_amd=$(lspci | awk '/VGA|3D|Display/ {print $0}' | cut -d ':' -f 3 | sed 's/^ //' | awk -F'[][]' '{print $2,$4}')
+case "$gpu_amd" in
+    *amd* | *radeon*)
+        printf "%-11s %s\n" "GPU:" "$gpu_amd"
+        ;;
+    *)
+        printf "%-11s %s\n" "GPU:" "$gpu_def"
+        ;;
+esac
 
 
 # VRAM
