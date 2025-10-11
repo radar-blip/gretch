@@ -1,9 +1,9 @@
 ## gretch   
 ### System Information Gathering Script  
 
-**Shell script written in bash for Linux Mint.**  
-**Displays system information in your terminal.**   
-**Will work in other distros also but not tested in all**  
+**Shell script written in bash for linux systems**  
+**Displays software/hardware information in your terminal.**   
+**Will work in some but not all distros**  
 
 
 ![screenshot](screenshot.png)
