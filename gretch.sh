@@ -18,14 +18,14 @@ shopt -s nocasematch
 # show = on / hide = off
 arch_switch="on"
 
-# on/off switch to show/hide terminal name
-# show = on / hide = off
-term_switch="on"  
-
 # on/off switch for uptime output
 # def = hours/minutes | min = hrs/mins
 # def = off / min = on
 uptime_switch="off"  
+
+# on/off switch to show/hide terminal name
+# show = on / hide = off
+term_switch="on"  
 
 
 # User/Hostname
@@ -161,7 +161,7 @@ dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 term=$(ps -o 'cmd=' -p $(ps -o 'ppid=' -p $(ps -o 'ppid=' -p $$ 2>/dev/null)))
 case $term_switch in
     on)
-        if [[ $osname == *"mint"* ]]; then
+        if [[ $osname == *"mint"* ]] && [[ $term == *"gnome"* ]]; then
             printf "%-11s%s\n" "Terminal:" "${term%-*}" | awk -F '/' '{print $1, $4}'
         else
             printf "%-11s %s\n" "Terminal:" "${term%%.*}"
