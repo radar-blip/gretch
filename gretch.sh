@@ -86,7 +86,6 @@ kern=$(uname -r)
 # Uptime
 uptime_def=$(uptime -p | cut -c 4-) 
 uptime_min=$(uptime -p | cut -c 4- | sed -e 's/hours/hrs/g' -e 's/minutes/mins/') #min
-
 case $uptime_switch in
     on)
         [[ -n $uptime_min ]] && printf "%-11s %s\n" "Uptime:" "$uptime_min"
@@ -142,14 +141,48 @@ wman=$(wmctrl -m 2>/dev/null | grep 'Name' | cut -d ":" -f 2)
     printf "%-11s %s\n" "WM:" "wmctrl not installed"
 
 
-# Theme
-theme=$(gtk-query-settings theme | grep 'gtk-theme-name' | cut -d ":" -f 2 | tr -d '"')
-[[ -n "$theme" ]] && printf "%-10s %s\n" "Theme:" "$theme [GTK2/3]"
+# Themes
+de=$(printf $XDG_CURRENT_DESKTOP)
+case "$de" in
+    gnome)
+        de=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
+        printf "%-11s %s\n" "Theme:" "$de [GTK2/3]"
+        ;;
+    mate)
+        de=$(gsettings get org.mate.desktop.interface gtk-theme | tr -d "'")
+        printf "%-11s %s\n" "Theme:" "$de [GTK2/3]"
+        ;;
+    cinnamon | x-cinnamon)
+        de=$(gsettings get org.cinnamon.desktop.interface gtk-theme | tr -d "'")
+        printf "%-11s %s\n" "Theme:" "$de [GTK2/3]"
+        ;;
+    *)
+        de=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
+        printf "%-11s %s\n" "Theme:" "$de"
+        ;;
+esac
 
 
 # Icons
-icons=$(gtk-query-settings theme | grep 'gtk-icon-theme-name' | cut -d ":" -f 2 | tr -d '"')
-[[ -n "$icons" ]] && printf "%-10s %s\n" "Icons:" "$icons [GTK2/3]"
+de=$(printf $XDG_CURRENT_DESKTOP)
+case "$de" in
+    gnome)
+        de=$(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")
+        printf "%-11s %s\n" "Icons:" "$de [GTK2/3]"
+        ;;
+    mate)
+        de=$(gsettings get org.mate.desktop.interface icon-theme | tr -d "'")
+        printf "%-11s %s\n" "Icons:" "$de [GTK2/3]"
+        ;;
+    cinnamon | x-cinnamon)
+        de=$(gsettings get org.cinnamon.desktop.interface icon-theme | tr -d "'")
+        printf "%-11s %s\n" "Icons:" "$de [GTK2/3]"
+        ;;
+    *)
+        de=$(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")
+        printf "%-11s %s\n" "Icons:" "$de"
+        ;;
+esac
 
 
 # Desktop theme (no output if not found)
@@ -161,7 +194,7 @@ dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 term=$(ps -o 'cmd=' -p $(ps -o 'ppid=' -p $(ps -o 'ppid=' -p $$ 2>/dev/null)))
 case $term_switch in
     on)
-        if [[ $osname == *"mint"* ]] && [[ $term == *"gnome"* ]]; then
+        if [[ $osname == *"mint"* ]]; then
             printf "%-11s%s\n" "Terminal:" "${term%-*}" | awk -F '/' '{print $1, $4}'
         else
             printf "%-11s %s\n" "Terminal:" "${term%%.*}"
@@ -171,13 +204,13 @@ case $term_switch in
         [[ -n "$term" ]] && printf ""
         ;;
     *)
-        printf ""
+            printf "%-11s %s\n" "Terminal:" "${term%%.*}"
         ;;
 esac
 
 
 # Resolution
-res=$(xdpyinfo | awk '/dimensions/ {print $2}')
+res=$(xdpyinfo 2>/dev/null | awk '/dimensions/ {print $2}')
 [[ -n $"res" ]] && printf "%-11s %s\n" "Resolution:" "$res"
 
 
