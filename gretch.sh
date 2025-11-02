@@ -5,7 +5,6 @@
 
 bold=$(tput bold)
 norm=$(tput sgr0)
-yell=$(tput setaf 3)
 
 clear
 printf "${bold}"
@@ -14,16 +13,20 @@ shopt -s nocasematch
 
 # Switches
 
-# on/off switch to show/hide architecture (ie x86_64)
+# on/off switch to show/hide Architecture (ie x86_64)
 # show = on / hide = off
-arch_switch="on"
+arch_switch="off"
 
-# on/off switch for uptime output
+# on/off switch to show/hide ID
+# show = on / hide = off
+id_switch="off"
+
+# on/off switch for Uptime output
 # def = hours/minutes | min = hrs/mins
 # def = off / min = on
 uptime_switch="off"  
 
-# on/off switch to show/hide terminal name
+# on/off switch to show/hide Terminal name
 # show = on / hide = off
 term_switch="on"  
 
@@ -47,6 +50,21 @@ case $arch_switch in
         ;;
     *)
         printf "%-11s %s\n" "OS:" "$osname"
+        ;;
+esac
+
+
+#ID
+id=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
+case $id_switch in
+    on)
+        [[ -n "$id" ]] && printf "%-11s %s\n" "ID:" "${id^}"
+        ;;
+    off)
+        [[ -n "$id" ]] && printf ""
+        ;;
+    *)
+        printf "%-11s %s\n" "ID:" "${id%%.*}"
         ;;
 esac
 
@@ -149,7 +167,7 @@ case "$de" in
         printf "%-11s %s\n" "Theme:" "$de [GTK2/3]"
         ;;
     mate)
-        de=$(gsettings get org.mate.desktop.interface gtk-theme | tr -d "'")
+        de=$(gsettings get org.mate.interface gtk-theme | tr -d "'")
         printf "%-11s %s\n" "Theme:" "$de [GTK2/3]"
         ;;
     cinnamon | x-cinnamon)
@@ -171,7 +189,7 @@ case "$de" in
         printf "%-11s %s\n" "Icons:" "$de [GTK2/3]"
         ;;
     mate)
-        de=$(gsettings get org.mate.desktop.interface icon-theme | tr -d "'")
+        de=$(gsettings get org.mate.interface icon-theme | tr -d "'")
         printf "%-11s %s\n" "Icons:" "$de [GTK2/3]"
         ;;
     cinnamon | x-cinnamon)
