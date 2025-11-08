@@ -243,7 +243,7 @@ flatpaks=$(flatpak list | wc -l)
 # CPU
 cpu_mod=$(lscpu | awk -F': *' '/Model name/{printf $2}' | cut -d ' ' -f 1,2,3)
 cpu_def=$(lscpu | awk -F': *' '/Model name/{printf $2}')
-max_ghz=$(lscpu | awk -F': *' '/CPU max MHz/{printf "@ " ($2/1000) " GHz"}')
+max_ghz=$(lscpu | awk -F': *' '/CPU max MHz/{printf ("@ %.1f GHz", $2/1000)}')
 case "$cpu_mod" in
     *amd* | *radeon* | *ryzen*)
         printf "%-11s %s %s\n" "CPU:" "$cpu_mod" "$max_ghz"
