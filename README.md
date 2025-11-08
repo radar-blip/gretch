@@ -1,9 +1,11 @@
 ## gretch   
 ### System Information Gathering Script  
 
-**Shell script written in bash for linux systems**  
-**Displays software/hardware information in your terminal.**   
-**Will work in some but not all distros**  
+**Shell script written in bash for Linux Mint.**    
+**Also tested on Parrot Security with both Mate and Cinnamon desktop environments.**  
+  
+**Displays hardware/software information in your terminal (as shown below).**  
+**May or may not work in other distros as I have not tested in all of them.**
 
 
 ![screenshot](screenshot.png)
