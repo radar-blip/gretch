@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # gretch 
 # system info gathering script
-# for linux systems
+# for linux
 
 bold=$(tput bold)
 norm=$(tput sgr0)
@@ -40,7 +40,7 @@ printf "\n${ghost//?/-}\n\n"
 # OS Name/Version + architecture
 osname=$(grep -E '^NAME=|^VERSION=' /etc/os-release | cut -d '"' -f 2 | tr '\n' ' ')
 arch=$(uname -m)
-case $arch_switch in
+case "$arch_switch" in
     on)
         [[ -n "$osname" ]] && printf "%-11s %s" "OS:" "$osname"
         [[ -n "$arch" ]] && printf "%-11s %s\n" "$arch"
@@ -56,7 +56,7 @@ esac
 
 #ID
 id=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
-case $id_switch in
+case "$id_switch" in
     on)
         [[ -n "$id" ]] && printf "%-11s %s\n" "ID:" "${id^}"
         ;;
@@ -98,22 +98,22 @@ esac
 
 # Kernel
 kern=$(uname -r)
-[[ -n $kern ]] && printf "%-11s %s\n" "Kernel:" "$kern"
+[[ -n "$kern" ]] && printf "%-11s %s\n" "Kernel:" "$kern"
 
 
 # Uptime
 uptime_def=$(uptime -p | cut -c 4-) 
 uptime_min=$(uptime -p | cut -c 4- | sed -e 's/hours/hrs/g' -e 's/minutes/mins/') #min
-case $uptime_switch in
+case "$uptime_switch" in
     on)
-        [[ -n $uptime_min ]] && printf "%-11s %s\n" "Uptime:" "$uptime_min"
+        [[ -n "$uptime_min" ]] && printf "%-11s %s\n" "Uptime:" "$uptime_min"
 
         ;;
     off)
-        [[ -n $uptime_def ]] && printf "%-11s %s\n" "Uptime:" "$uptime_def"
+        [[ -n "$uptime_def" ]] && printf "%-11s %s\n" "Uptime:" "$uptime_def"
         ;;
     *)
-        [[ -n $uptime_def ]] && printf "%-11s %s\n" "Uptime:" "$uptime_def"
+        [[ -n "$uptime_def" ]] && printf "%-11s %s\n" "Uptime:" "$uptime_def"
         ;;
 esac
 
@@ -210,10 +210,14 @@ dtheme=$(gsettings get org.cinnamon.theme name 2>/dev/null | tr -d "''")
 
 # Terminal
 term=$(ps -o 'cmd=' -p $(ps -o 'ppid=' -p $(ps -o 'ppid=' -p $$ 2>/dev/null)))
-case $term_switch in
+case "$term_switch" in
     on)
-        if [[ $osname == *"mint"* ]]; then
+        if [[ $osname = *"mint"* ]] && [[ $term == *"gnome"* ]]; then
             printf "%-11s%s\n" "Terminal:" "${term%-*}" | awk -F '/' '{print $1, $4}'
+        elif [[ $term == *"gnome"* ]]; then
+            printf "%-11s %s\n" "Terminal:" "${term%*}" | awk -F '/' '{print $1, $4}'
+        elif [[ $term == *"mate"* ]]; then
+            printf "%-11s %s\n" "Terminal:" "${term%*}" | awk -F '/' '{print $1, $4}'
         else
             printf "%-11s %s\n" "Terminal:" "${term%%.*}"
         fi
@@ -229,13 +233,13 @@ esac
 
 # Resolution
 res=$(xdpyinfo 2>/dev/null | awk '/dimensions/ {print $2}')
-[[ -n $"res" ]] && printf "%-11s %s\n" "Resolution:" "$res"
+[[ -n "$res" ]] && printf "%-11s %s\n" "Resolution:" "$res"
 
 
 # Packages
 packages=$(dpkg --get-selections | wc -l)
 flatpaks=$(flatpak list | wc -l)
-[[ $(flatpak list | wc -l) -eq 0 ]] && \
+[[ "$flatpaks" -lt 1 ]] && \
     printf "%-11s %s %s\n" "Packages:" "$packages" "(dpkg)" || \
     printf "%-11s %s %s %s %s\n" "Packages:" "$packages" "(dpkg)," "$flatpaks" "(flatpak)"
 
