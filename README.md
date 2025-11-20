@@ -1,4 +1,7 @@
-## gretch   
+---
+Gretch:
+---
+
 ### System Information Gathering Script  
 
 **Shell script written in bash for Linux Mint.**    
