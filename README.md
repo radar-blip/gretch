@@ -1,8 +1,7 @@
----
-Gretch:
----
+## Gretch
 
-### System Information Gathering Script  
+
+### Linux System Information Gathering Script  
 
 **Shell script written in bash for Linux Mint.**    
 **Also tested on Parrot Security with both Mate and Cinnamon desktop environments.**  
