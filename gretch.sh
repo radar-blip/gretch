@@ -28,7 +28,7 @@ uptime_switch="off"
 
 # on/off switch to show/hide Terminal name
 # show = on / hide = off
-term_switch="on"  
+term_switch="off"  
 
 
 # User/Hostname
